@@ -17,9 +17,9 @@ from dotenv import dotenv_values
 config = dotenv_values(".env")
 
 
-os.environ["SPOTIPY_CLIENT_ID"] = config['CLIENT_ID']
-os.environ["SPOTIPY_CLIENT_SECRET"] = config['CLIENT_SECRET']
-os.environ["SPOTIPY_REDIRECT_URI"] = config['REDIRECT']
+#os.environ["CLIENT_ID"] = config['CLIENT_ID']
+#os.environ["CLIENT_SECRET"] = config['CLIENT_SECRET']
+#os.environ["REDIRECT_URI"] = config['REDIRECT']
 
 app = Flask(__name__)
 
@@ -103,13 +103,13 @@ def get_tone(sent=None):
     # Tone Analyzer API
 
     if(sent and sent.replace('_','')):
-        authenticator = IAMAuthenticator(config['IBM_KEY'])
+        authenticator = IAMAuthenticator(os.environ['IBM_KEY'])
         tone_analyzer = ToneAnalyzerV3(
             version='2017-09-21',
             authenticator=authenticator
         )
         sent = sent.replace('_',' ')
-        tone_analyzer.set_service_url(config['SERVICE_URL'])
+        tone_analyzer.set_service_url(os.environ['SERVICE_URL'])
         tone_analysis = tone_analyzer.tone(
             {'text': sent },
             content_type='application/json'
