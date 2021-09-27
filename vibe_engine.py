@@ -14,6 +14,7 @@ from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from dotenv import load_dotenv
 import grab_spotify_data as gr
 from dotenv import dotenv_values
+from waitress import serve
 config = dotenv_values(".env")
 
 
@@ -178,4 +179,5 @@ def derive_mood(tones):
         return 'Other'
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    #app.run(debug=True)
+    serve(app, host='0.0.0.0', port=os.environ["PORT"], url_scheme='https')
