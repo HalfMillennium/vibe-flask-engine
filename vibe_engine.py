@@ -15,7 +15,7 @@ from dotenv import load_dotenv
 import grab_spotify_data as gr
 from dotenv import dotenv_values
 from waitress import serve
-from flask_json import FlaskJSON, as_json_p
+#from flask_json import FlaskJSON, as_json_p
 config = dotenv_values(".env")
 
 
@@ -100,7 +100,7 @@ def get_playlist(varargs=None):
     return jsonify(track_info)
 
 @app.route('/gettone/', methods=['GET'])
-@as_json_p
+#@as_json_p
 def get_tone(sent=None):
     # spaces in the string are replaced with '_'
     # Tone Analyzer API
@@ -118,7 +118,11 @@ def get_tone(sent=None):
             content_type='application/json'
         ).get_result()
 
-        return jsonify(derive_mood(tone_analysis['document_tone']['tones']))
+        #return jsonify()
+        return '{funcname}({data})'.format(
+            funcname=request.args.get('callback'),
+            data=jsonify(derive_mood(tone_analysis['document_tone']['tones'])),
+        )
     else:
         return None
 
