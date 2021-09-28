@@ -16,7 +16,8 @@ from dotenv import load_dotenv
 import grab_spotify_data as gr
 from dotenv import dotenv_values
 from waitress import serve
-#from flask_json import FlaskJSON, as_json_p
+from flask_cors import CORS
+
 config = dotenv_values(".env")
 
 
@@ -25,6 +26,7 @@ config = dotenv_values(".env")
 #os.environ["REDIRECT_URI"] = config['REDIRECT']
 
 app = Flask(__name__)
+CORS(app)
 
 # load .env file
 load_dotenv()
@@ -98,6 +100,11 @@ def get_playlist(varargs=None):
     current = current['item']
     track_info.insert(0, [current['album']['images'][0]['url'],current['artists'][0]['name'],current['name']])
     # Returns array of songs (IDs) that fit the user's desired mood
+    #json_res = json.dumps(track_info)
+    #return '{funcname}({data})'.format(
+    #        funcname=request.args.get('callback'),
+    #        data=json_res
+    #    )
     return jsonify(track_info)
 
 @app.route('/gettone/<sent>', methods=['GET'])
@@ -119,11 +126,11 @@ def get_tone(sent=None):
         ).get_result()
         json_res = json.dumps(derive_mood(tone_analysis['document_tone']['tones']))
         pstdout(json_res)
-        return '{funcname}({data})'.format(
-            funcname=request.args.get('callback'),
-            data=json_res
-        )
-        #return jsonify(derive_mood(tone_analysis['document_tone']['tones']))
+        #return '{funcname}({data})'.format(
+        #    funcname=request.args.get('callback'),
+        #    data=json_res
+        #)
+        return jsonify(derive_mood(tone_analysis['document_tone']['tones']))
     else:
         return None
 
