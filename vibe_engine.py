@@ -99,20 +99,7 @@ def get_playlist(varargs=None):
     # Returns array of songs (IDs) that fit the user's desired mood
     return jsonify(track_info)
 
-def support_jsonp(f):
-    """Require user authorization"""
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        callback = request.args.get('callback', False)
-        if callback:
-            content = str(callback) + '(' + json.dumps(dict(*args, **kwargs)) + ')'
-            return current_app.response_class(content, mimetype='application/json')
-        else:
-            return f(*args, **kwargs)
-    return decorated_function
-
-@app.route('/gettone/<sent>', methods=['GET'])
-@support_jsonp
+@app.route('/gettone/<path:sent>', methods=['GET'])
 def get_tone(sent=None):
     # spaces in the string are replaced with '_'
     # Tone Analyzer API
@@ -129,8 +116,12 @@ def get_tone(sent=None):
             {'text': sent },
             content_type='application/json'
         ).get_result()
-
-        return jsonify(derive_mood(tone_analysis['document_tone']['tones']))
+        json_res = jsonify(derive_mood(tone_analysis['document_tone']['tones']))
+        return '{funcname}({data})'.format(
+            funcname=request.args.get('callback'),
+            data=jsonify(json_res)
+        )
+        #return jsonify(derive_mood(tone_analysis['document_tone']['tones']))
     else:
         return None
 
