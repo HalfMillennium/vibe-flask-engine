@@ -99,12 +99,12 @@ def get_playlist(varargs=None):
     # Returns array of songs (IDs) that fit the user's desired mood
     return jsonify(track_info)
 
-@app.route('/gettone/', methods=['GET'])
+@app.route('/gettone/<sent>', methods=['GET'])
 #@as_json_p
 def get_tone(sent=None):
     # spaces in the string are replaced with '_'
     # Tone Analyzer API
-    sent = request.args.get('text')
+    #sent = request.args.get('text')
     if(sent and sent.replace('_','')):
         authenticator = IAMAuthenticator(os.environ['IBM_KEY'])
         tone_analyzer = ToneAnalyzerV3(
