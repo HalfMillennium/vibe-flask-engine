@@ -116,7 +116,7 @@ def get_tone(sent=None):
             {'text': sent },
             content_type='application/json'
         ).get_result()
-        json_res = jsonify(derive_mood(tone_analysis['document_tone']['tones']))
+        json_res = json.dumps(derive_mood(tone_analysis['document_tone']['tones']))
         return '{funcname}({data})'.format(
             funcname=request.args.get('callback'),
             data=jsonify(json_res)
