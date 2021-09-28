@@ -6,6 +6,7 @@ import spotipy.util as util
 import pandas as pd
 import numpy as np
 import pickle
+import json
 from spotipy.oauth2 import SpotifyOAuth
 from flask import Flask, jsonify, request
 from sklearn.preprocessing import StandardScaler, LabelEncoder
@@ -99,7 +100,7 @@ def get_playlist(varargs=None):
     # Returns array of songs (IDs) that fit the user's desired mood
     return jsonify(track_info)
 
-@app.route('/gettone/<path:sent>', methods=['GET'])
+@app.route('/gettone/<sent>', methods=['GET'])
 def get_tone(sent=None):
     # spaces in the string are replaced with '_'
     # Tone Analyzer API
