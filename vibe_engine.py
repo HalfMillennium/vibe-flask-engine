@@ -99,6 +99,7 @@ def get_playlist(varargs=None):
     return jsonify(track_info)
 
 @app.route('/gettone/<path:sent>', methods=['GET'])
+@as_json_p
 def get_tone(sent=None):
     # spaces in the string are replaced with '_'
     # Tone Analyzer API
